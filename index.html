@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ultra Gay Kappa Pride Animation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+      height: 100%;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+    }
+    #ultraGayButton {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 20px 40px;
+      font-size: 24px;
+      background: #fff;
+      border: 3px solid #000;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.2s;
+    }
+    #ultraGayButton:hover {
+      transform: translateX(-50%) scale(1.1);
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <button id="ultraGayButton">ULTRA GAY</button>
+  <canvas id="canvas"></canvas>
+  
+  <script>
+    // Get canvas and context
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas to fill window
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Load the Kappa Pride Emote image (update URL as needed)
+    const kappaImg = new Image();
+    kappaImg.src = "/assets/kappa_pride.png"; // Replace with your desired image URL
+
+    // Raindrop (emote) properties
+    class Emote {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -Math.random() * canvas.height;
+        this.speed = 2 + Math.random() * 3;
+        this.size = 40 + Math.random() * 20;
+      }
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.reset();
+        }
+      }
+      draw() {
+        ctx.drawImage(kappaImg, this.x, this.y, this.size, this.size);
+      }
+    }
+
+    // Array to store the falling emotes
+    const emotes = [];
+    const maxEmotes = 50; // Adjust for more or less raining emotes
+
+    // Create emote instances
+    for (let i = 0; i < maxEmotes; i++) {
+      emotes.push(new Emote());
+    }
+
+    let animationActive = false;
+
+    // Animation loop
+    function animate() {
+      if (!animationActive) return; // Stop animation if flag is off
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      emotes.forEach(emote => {
+        emote.update();
+        emote.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    // Start the animation when button is clicked
+    document.getElementById('ultraGayButton').addEventListener('click', () => {
+      if (!animationActive) {
+        animationActive = true;
+        animate();
+      }
+    });
+  </script>
+</body>
+</html>
